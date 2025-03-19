@@ -87,11 +87,13 @@ Mail: wyznikiewiczmarta@gmail.com
   
   .tab-content {
     display: none;
+    opacity: 0;
     transition: opacity 0.3s ease-in-out;
   }
   
   .tab-content.active {
     display: block;
+    opacity: 1;
   }
   
   .tab-content-wrapper {
@@ -175,7 +177,7 @@ Mail: wyznikiewiczmarta@gmail.com
     font-weight: bold;
   }
   
-  @media (max-width: 886px) {
+  @media (max-width: 945px) {
     .custom-whole {
       flex-direction: column;
       align-items: center;
@@ -185,7 +187,7 @@ Mail: wyznikiewiczmarta@gmail.com
     font-size: 32px;
     }
 
-    .custom-image img {
+    .custom-image {
       width: 100%;
       height: auto;
     }
@@ -295,17 +297,20 @@ document.addEventListener("DOMContentLoaded", function() {
 
     buttons.forEach((btn, index) => {
         btn.addEventListener("click", () => {
-            buttons.forEach(b => b.classList.remove("active"));
+            buttons.forEach(b => {
+                b.classList.remove("active");
+                b.setAttribute("aria-selected", "false");
+            });
             contents.forEach(c => c.classList.remove("active"));
 
             btn.classList.add("active");
+            buttons.forEach(b => b.setAttribute("aria-selected", "false"));
             btn.setAttribute("aria-selected", "true");
 
             document.getElementById("tab-" + index).classList.add("active");
         });
     });
 });
-
 </script>
 
 {% schema %}
@@ -371,7 +376,7 @@ document.addEventListener("DOMContentLoaded", function() {
       "type": "number",
       "id": "padding_mobile_bottom",
       "label": "Bottom",
-      "default": 10
+      "default": 64
     },
     {
       "type": "number",
