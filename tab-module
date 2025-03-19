@@ -1,0 +1,514 @@
+{% comment %}
+Rekrutacja - Marta Wyżnikiewicz
+LinkedIn: https://www.linkedin.com/in/marta-wyznikiewicz/
+Tel.: +48732131196
+Mail: wyznikiewiczmarta@gmail.com
+{% endcomment %}
+
+{%- style -%}
+  .custom-whole {
+    background: #E4F2F9;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: {{ section.settings.padding_desktop_top }}px  0 {{ section.settings.padding_desktop_bottom }}px 0;
+  }
+  
+  .custom-image {
+    width: 610px;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  
+  .custom-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .custom-tabs {
+    flex-grow: 1;
+    padding: 0 {{ section.settings.padding_desktop_right }}px 0 {{ section.settings.padding_desktop_left }}px;
+  }
+  
+  .custom-header {
+    font-weight: 400;
+    font-size: 48px;
+    letter-spacing: -0.05em;
+    text-align: center;
+  }
+  
+  .tabs-navigation {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    border-bottom: 1px solid rgba(34, 36, 44, 0.2);
+  }
+    
+  .tab-button {
+    flex: 1;
+    text-align: center;
+    padding: 16px 0;
+    background-color: transparent;
+    border: none;
+    position: relative;
+    font-size: 18px;
+    font-weight: bold;
+    color: rgba(34, 36, 44, 0.5);
+    cursor: pointer;
+  }
+    
+  .tab-button::after {
+    content: "";
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: rgba(34, 36, 44, 0.2);
+    transition: background 0.3s ease-in-out;
+  }
+  
+  .tab-button.active {
+    color: rgba(34, 36, 44, 1);
+  }
+  
+  .tab-button.active::after {
+    background: rgba(34, 36, 44, 1);
+  }
+  
+  .tabs-content {
+    margin-top: 20px;
+    flex-grow: 1;
+    display: flex;
+  }
+  
+  .tab-content {
+    display: none;
+    transition: opacity 0.3s ease-in-out;
+  }
+  
+  .tab-content.active {
+    display: block;
+  }
+  
+  .tab-content-wrapper {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 72px 32px;
+  }
+  
+  .tab-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 40px;
+  }
+  
+  .tab-text {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .step_content {
+    min-height: 58px;
+    width: calc(50% - 23px);
+    display: inline-flex;
+    gap: 20px;
+  }
+  .mf {
+    margin: 0 40px 80px 0;
+  }
+  .ms {
+    margin: 0 0 80px 0;
+  }
+  .mt {
+    margin: 0 40px 0 0;
+  }
+  
+  @media (max-width: 1350px) {
+    .step_content {
+    width: 100%;
+    }
+    .mf {
+      margin: 0 0 48px 0;
+    }
+    .ms {
+      margin: 0 0 48px 0;
+    }
+    .mt {
+      margin: 0 0 48px 0;
+    }
+  }
+  
+  .step_title {
+    font-size: 16px;
+    font-weight: bold;
+    letter-spacing: -0.009em;
+    margin: 0 0 8px 0;
+  }
+    
+  .step_description {
+    font-weight: 300;
+    line-height: 16px;
+    gap:48px;
+  }
+  
+  .info-below {
+    text-align: center;
+    font-size: 14px;
+    letter-spacing: -0.009em;
+    font-weight: bold;
+  }
+  
+  .info-below a {
+    color: rgba(34, 36, 44, 1.0) !important;
+  }
+
+  .custom-tabs ol {
+    padding-inline-start: 0px !important;
+  }
+
+  .tab-content-wrapper li {
+    font-weight: bold;
+  }
+  
+  @media (max-width: 886px) {
+    .custom-whole {
+      flex-direction: column;
+      align-items: center;
+      padding: {{ section.settings.padding_mobile_top }}px 0 {{ section.settings.padding_mobile_bottom }}px 0;
+    }
+    .custom-header {
+    font-size: 32px;
+    }
+
+    .custom-image img {
+      width: 100%;
+      height: auto;
+    }
+
+    .custom-tabs {
+      flex-direction: column;
+      padding: 0 {{ section.settings.padding_mobile_right }}px 0 {{ section.settings.padding_mobile_left }}px;
+    }
+
+    .tabs-navigation {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      border-bottom: 1px solid rgba(34, 36, 44, 0.2);
+    }
+  }
+{%- endstyle -%}
+
+<div class="custom-whole">
+  {% if section.settings.image %}
+    <div class="custom-image">
+      {{ section.settings.image | image_url: width: 610  | image_tag }}
+    </div>
+  {% endif %}
+  
+  <div class="custom-tabs">
+    <p class="custom-header">{{ section.settings.header_tab }}</p>
+    <div class="tabs-navigation">
+      {% for block in section.blocks %}
+        <button class="tab-button {% if forloop.first %}active{% endif %}" 
+          data-tab="{{ forloop.index0 }}"
+          aria-controls="tab-{{ forloop.index0 }}"
+          aria-selected="{% if forloop.first %}true{% else %}false{% endif %}">
+          {{ block.settings.tab_title }}
+        </button>
+      {% endfor %}
+    </div>
+  
+    <div class="tabs-content">
+      {% for block in section.blocks %}
+        <div class="tab-content {% if forloop.first %}active{% endif %}" id="tab-{{ forloop.index0 }}">
+          <div class="tab-content-wrapper">
+            <ol>
+                <div class="step_content mf">
+                  {% if block.settings.image_1 != blank %}
+                    <div class="tab-icon">{{ block.settings.image_1 | image_url: width: 24  | image_tag }}</div>
+                  {% endif %}
+                  <li>
+                    <div class="tab-text">
+                      <span class="step_title">{{ block.settings.heading_1 }}</span>
+                      <div class="step_description">{{ block.settings.text_1 }}</div>
+                    </div>                    
+                  </li>
+                </div>
+ 
+                <div class="step_content ms">
+                  {% if block.settings.image_2 != blank %}
+                    <div class="tab-icon">{{ block.settings.image_2 | image_url: width: 24  | image_tag }}</div>
+                  {% endif %}
+                  <li>
+                    <div class="tab-text">
+                      <span class="step_title">{{ block.settings.heading_2 }}</span>
+                      <div class="step_description">{{ block.settings.text_2 }}</div>
+                    </div>                    
+                  </li>
+                </div>                
+
+  
+                <div class="step_content mt">
+                  {% if block.settings.image_3 != blank %}
+                    <div class="tab-icon">{{ block.settings.image_3 | image_url: width: 24  | image_tag }}</div>
+                  {% endif %}
+                  <li>
+                  <div class="tab-text">
+                    <span class="step_title">{{ block.settings.heading_3 }}</span>
+                    <div class="step_description">{{ block.settings.text_3 }}</div>
+                  </div>                    
+                  </li>
+                </div>
+
+                <div class="step_content">
+                  {% if block.settings.image_4 != blank %}
+                    <div class="tab-icon">{{ block.settings.image_4 | image_url: width: 24  | image_tag }}</div>
+                  {% endif %}
+                  <li>                    
+                  <div class="tab-text">
+                    <span class="step_title">{{ block.settings.heading_4 }}</span>
+                    <div class="step_description">{{ block.settings.text_4 }}</div>
+                  </div>
+                  </li>
+                </div>                
+             
+            </ol>
+            
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    <div class="info-below">{{ section.settings.info_below_steps }}</div>
+  </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const buttons = document.querySelectorAll(".tab-button");
+    const contents = document.querySelectorAll(".tab-content");
+
+    buttons.forEach((btn, index) => {
+        btn.addEventListener("click", () => {
+            buttons.forEach(b => b.classList.remove("active"));
+            contents.forEach(c => c.classList.remove("active"));
+
+            btn.classList.add("active");
+            btn.setAttribute("aria-selected", "true");
+
+            document.getElementById("tab-" + index).classList.add("active");
+        });
+    });
+});
+
+</script>
+
+{% schema %}
+{
+  "name": "Custom Tabs",
+  "max_blocks": 4,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Header"
+    }, 
+    {
+      "type": "text",
+      "id": "header_tab",
+      "label": "Header",
+      "default": "Header over tabs"
+    },
+    {
+      "type": "header",
+      "content": "Padding Desktop"
+    },
+    {
+      "type": "number",
+      "id": "padding_desktop_top",
+      "label": "Top",
+      "default": 172
+    },
+    {
+      "type": "number",
+      "id": "padding_desktop_right",
+      "label": "Right",
+      "default": 48
+    },
+    {
+      "type": "number",
+      "id": "padding_desktop_bottom",
+      "label": "Bottom",
+      "default": 172
+    },
+    {
+      "type": "number",
+      "id": "padding_desktop_left",
+      "label": "Left",
+      "default": 48
+    },
+    {
+      "type": "header",
+      "content": "Padding Mobile"
+    },
+    {
+      "type": "number",
+      "id": "padding_mobile_top",
+      "label": "Top",
+      "default": 10
+    },
+    {
+      "type": "number",
+      "id": "padding_mobile_right",
+      "label": "Right",
+      "default": 16
+    },
+    {
+      "type": "number",
+      "id": "padding_mobile_bottom",
+      "label": "Bottom",
+      "default": 10
+    },
+    {
+      "type": "number",
+      "id": "padding_mobile_left",
+      "label": "Left",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Image",
+      "info": "Select an image" 
+    },  
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Information below steps"
+    },  
+    {
+      "type": "richtext",
+      "id": "info_below_steps",
+      "label": "Information below "
+    },
+  ],
+  "blocks": [
+    {
+      "type": "tab",
+      "name": "Tab",
+      "settings": [
+        {
+          "type": "text",
+          "id": "tab_title",
+          "label": "Title",
+          "default": "Option (number)"
+        },
+        {
+          "type": "header",
+          "content": "Step 1"
+        }, 
+        {
+          "type": "text",
+          "id": "heading_1",
+          "label": "Heading 1",
+          "default": "First Step"
+        },
+        {
+          "type": "textarea",
+          "id": "text_1",
+          "label": "Description 1",
+          "default": "Example description text, that explains part of process."
+        },
+        {
+          "type": "image_picker",
+          "id": "image_1",
+          "label": "Icon 1"
+        },
+        {
+          "type": "header",
+          "content": "Step 2"
+        }, 
+        {
+          "type": "text",
+          "id": "heading_2",
+          "label": "Heading 2",
+          "default": "Second Step"
+        },
+        {
+          "type": "textarea",
+          "id": "text_2",
+          "label": "Description 2",
+          "default": "Example description text, that explains part of process."
+        },
+        {
+          "type": "image_picker",
+          "id": "image_2",
+          "label": "Icon 2"
+        },
+        {
+          "type": "header",
+          "content": "Step 3"
+        }, 
+        {
+          "type": "text",
+          "id": "heading_3",
+          "label": "Heading 3",
+          "default": "Third Step"
+        },
+        {
+          "type": "textarea",
+          "id": "text_3",
+          "label": "Description 3",
+          "default": "Example description text, that explains part of process."
+        },
+        {
+          "type": "image_picker",
+          "id": "image_3",
+          "label": "Icon 3"
+        },
+        {
+          "type": "header",
+          "content": "Step 4"
+        }, 
+        {
+          "type": "text",
+          "id": "heading_4",
+          "label": "Heading 4",
+          "default": "Fourth Step"
+        },
+        {
+          "type": "textarea",
+          "id": "text_4",
+          "label": "Description 4",
+          "default": "Example description text, that explains part of process."
+        },
+        {
+          "type": "image_picker",
+          "id": "image_4",
+          "label": "Icon 4"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Tabs",
+      "blocks": [
+        {
+          "type": "tab"
+        },
+        {
+          "type": "tab"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
